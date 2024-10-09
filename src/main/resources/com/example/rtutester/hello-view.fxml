@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -11,142 +15,54 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="521.0" prefWidth="974.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rtutester.HelloController">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="1062.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rtutester.HelloController">
    <children>
-      <TextArea layoutX="167.0" layoutY="27.0" prefHeight="311.0" prefWidth="748.0" style="-fx-border-color: black;" />
-      <HBox layoutX="161.0" layoutY="361.0" prefHeight="47.0" prefWidth="748.0">
-         <children>
-            <VBox prefHeight="50.0" prefWidth="46.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="1" />
-                  <TextField alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
-               </children>
-            </VBox>
-            <Line endX="-100.0" endY="50.0" startX="-100.0" />
-            <VBox prefHeight="50.0" prefWidth="46.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="2" />
-                  <TextField alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
-               </children>
-            </VBox>
-            <Line endX="-100.0" endY="50.0" startX="-100.0" />
-            <VBox prefHeight="50.0" prefWidth="46.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="3" />
-                  <TextField alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
-               </children>
-            </VBox>
-            <Line endX="-100.0" endY="50.0" startX="-100.0" />
-            <VBox prefHeight="50.0" prefWidth="46.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="4" />
-                  <TextField alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
-               </children>
-            </VBox>
-            <Line endX="-100.0" endY="50.0" startX="-100.0" />
-            <VBox prefHeight="50.0" prefWidth="46.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="5" />
-                  <TextField alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
-               </children>
-            </VBox>
-            <Line endX="-100.0" endY="50.0" startX="-100.0" />
-            <VBox prefHeight="50.0" prefWidth="46.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="6" />
-                  <TextField alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
-               </children>
-            </VBox>
-            <Line endX="-100.0" endY="50.0" startX="-100.0" />
-            <VBox prefHeight="50.0" prefWidth="46.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="7" />
-                  <TextField alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
-               </children>
-            </VBox>
-            <Line endX="-100.0" endY="50.0" startX="-100.0" />
-            <VBox prefHeight="50.0" prefWidth="46.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="8" />
-                  <TextField alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
-               </children>
-            </VBox>
-            <Line endX="-100.0" endY="50.0" startX="-100.0" />
-            <VBox prefHeight="50.0" prefWidth="46.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="9" />
-                  <TextField alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
-               </children>
-            </VBox>
-            <Line endX="-100.0" endY="50.0" startX="-100.0" />
-            <VBox prefHeight="50.0" prefWidth="46.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="10" />
-                  <TextField alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
-               </children>
-            </VBox>
-            <Line endX="-100.0" endY="50.0" startX="-100.0" />
-            <VBox prefHeight="50.0" prefWidth="46.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="11" />
-                  <TextField alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
-               </children>
-            </VBox>
-            <Line endX="-100.0" endY="50.0" startX="-100.0" />
-            <VBox prefHeight="50.0" prefWidth="46.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="12" />
-                  <TextField alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
-               </children>
-            </VBox>
-            <Line endX="-100.0" endY="50.0" startX="-100.0" />
-            <VBox prefHeight="50.0" prefWidth="46.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="13" />
-                  <TextField alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
-               </children>
-            </VBox>
-            <Line endX="-100.0" endY="50.0" startX="-100.0" />
-            <VBox prefHeight="50.0" prefWidth="46.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="14" />
-                  <TextField alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
-               </children>
-            </VBox>
-            <Line endX="-100.0" endY="50.0" startX="-100.0" />
-            <VBox prefHeight="50.0" prefWidth="46.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="15" />
-                  <TextField alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
-               </children>
-            </VBox>
-            <Line endX="-100.0" endY="50.0" startX="-100.0" />
-            <VBox prefHeight="50.0" prefWidth="46.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="16" />
-                  <TextField alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
-               </children>
-            </VBox>
-         </children>
-      </HBox>
-      <Button layoutX="70.0" layoutY="460.0" mnemonicParsing="false" onAction="#testCal" text="Test Cal" />
-      <Button layoutX="153.0" layoutY="460.0" mnemonicParsing="false" onAction="#testSliders" text="Test RFR" />
-      <VBox layoutX="20.0" layoutY="27.0" prefHeight="425.0" prefWidth="100.0" spacing="7.0">
+      <MenuBar prefHeight="25.0" prefWidth="1062.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+                  <MenuItem mnemonicParsing="false" onAction="#showHelp" text="N-port Default IP" />
+                  <MenuItem mnemonicParsing="false" onAction="#showOpSettings" text="N-port Operating Settings" />
+                  <MenuItem mnemonicParsing="false" onAction="#showSerSettings" text="N-port Serial Settings" />
+                  <MenuItem mnemonicParsing="false" onAction="#showPinSettings" text="N-port DB9 Pinout" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <TextArea fx:id="textArea" editable="false" layoutX="145.0" layoutY="219.0" prefHeight="311.0" prefWidth="893.0" style="-fx-border-color: black;">
+         <font>
+            <Font name="Courier New" size="11.0" />
+         </font></TextArea>
+      <VBox layoutX="8.0" layoutY="27.0" prefHeight="489.0" prefWidth="124.0" spacing="7.0">
          <children>
             <VBox prefHeight="30.0" prefWidth="100.0">
                <children>
                   <Label text="Card Model" />
-                  <ComboBox fx:id="comboBoxCard" prefHeight="25.0" prefWidth="98.0" />
+                  <ComboBox fx:id="comboBoxCard" prefHeight="25.0" prefWidth="129.0" />
                </children>
             </VBox>
-            <VBox prefHeight="129.0" prefWidth="100.0" style="-fx-border-color: black;">
+            <CheckBox fx:id="processorCheckbox" mnemonicParsing="false" selected="true" text="Processor" />
+            <VBox fx:id="dipSwitchVbox" prefHeight="129.0" prefWidth="100.0" style="-fx-border-color: black;">
                <children>
                   <Label text="RTU Dip Switches" />
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <HBox fx:id="hBoxSlider8" alignment="CENTER" prefHeight="0.0" prefWidth="98.0">
                      <children>
-                        <Label alignment="CENTER" prefHeight="18.0" prefWidth="73.0" text="ON" />
-                        <Label prefHeight="18.0" prefWidth="37.0" text="OFF" />
+                        <Label text="8" />
+                        <Slider fx:id="slider8" blockIncrement="1.0" majorTickUnit="1.0" max="1.0" minorTickCount="0" prefHeight="24.0" prefWidth="79.0" snapToTicks="true" />
+                     </children>
+                  </HBox>
+                  <HBox fx:id="hBoxSlider7" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="7" />
+                        <Slider fx:id="slider7" blockIncrement="1.0" majorTickUnit="1.0" max="1.0" minorTickCount="0" prefHeight="24.0" prefWidth="79.0" snapToTicks="true" />
+                     </children>
+                  </HBox>
+                  <HBox fx:id="hBoxSlider6" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="6" />
+                        <Slider fx:id="slider6" blockIncrement="1.0" majorTickUnit="1.0" max="1.0" minorTickCount="0" prefHeight="24.0" prefWidth="79.0" snapToTicks="true" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
@@ -176,37 +92,288 @@
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <Label text="1" />
-                        <Slider fx:id="slider1" blockIncrement="1.0" majorTickUnit="1.0" max="1.0" minorTickCount="0" prefHeight="24.0" prefWidth="79.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+                        <Slider fx:id="slider1" blockIncrement="1.0" majorTickUnit="1.0" max="1.0" minorTickCount="0" prefHeight="24.0" prefWidth="79.0" snapToTicks="true" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="18.0" prefWidth="73.0" text="0       " />
+                        <Label prefHeight="18.0" prefWidth="37.0" text="  1" />
                      </children>
                   </HBox>
                </children>
             </VBox>
-            <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="98.0" text="Calibrate" />
-            <VBox prefHeight="103.0" prefWidth="100.0" spacing="10.0" style="-fx-border-color: black;">
+            <Label fx:id="selectedRTULabel" prefHeight="17.0" prefWidth="136.0" text="Selected RTU: 0" />
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="96.0" text="Polling" />
-                  <ToggleButton mnemonicParsing="false" prefWidth="100.0" text="Start" />
-                  <ToggleButton mnemonicParsing="false" prefWidth="100.0" text="Stop" />
+                  <Button fx:id="calibrateButton" mnemonicParsing="false" onAction="#calibrateRTU" prefHeight="25.0" prefWidth="135.0" text="Calibrate" />
+                  <Label text="(Need if no processor)" />
+               </children>
+            </VBox>
+            <Label fx:id="calibratedText" alignment="CENTER" prefHeight="17.0" prefWidth="132.0" text="Calibrated!" textFill="#00ff1a">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <VBox prefHeight="131.0" prefWidth="100.0" spacing="10.0" style="-fx-border-color: black;">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="121.0" text="Polling" />
+                  <ToggleButton fx:id="startButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Start" />
+                  <ToggleButton fx:id="stopButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="139.0" text="Stop" />
                </children>
             </VBox>
             <VBox prefHeight="51.0" prefWidth="100.0" spacing="4.0" style="-fx-border-color: black;">
                <children>
-                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="96.0" text="Comms" />
+                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="127.0" text="Comms" />
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <Label text="Tx: " />
-                        <Label text="0" />
+                        <Label fx:id="txLabel" text="0" />
                      </children>
                   </HBox>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <Label text="Rx: " />
-                        <Label text="0" />
+                        <Label fx:id="rxLabel" text="0" />
                      </children>
                   </HBox>
                </children>
             </VBox>
          </children>
       </VBox>
+      <HBox fx:id="analogHbox" layoutX="209.0" layoutY="33.0" prefHeight="47.0" prefWidth="748.0" style="-fx-border-color: BLACK;">
+         <children>
+            <VBox prefHeight="50.0" prefWidth="46.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="0" />
+                  <TextField fx:id="analogCh1" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox prefHeight="50.0" prefWidth="46.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="1" />
+                  <TextField fx:id="analogCh2" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox prefHeight="50.0" prefWidth="46.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="2" />
+                  <TextField fx:id="analogCh3" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox prefHeight="50.0" prefWidth="46.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="3" />
+                  <TextField fx:id="analogCh4" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox prefHeight="50.0" prefWidth="46.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="4" />
+                  <TextField fx:id="analogCh5" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox prefHeight="50.0" prefWidth="46.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="5" />
+                  <TextField fx:id="analogCh6" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox prefHeight="50.0" prefWidth="46.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="6" />
+                  <TextField fx:id="analogCh7" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox prefHeight="50.0" prefWidth="46.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="7" />
+                  <TextField fx:id="analogCh8" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox prefHeight="50.0" prefWidth="46.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="8" />
+                  <TextField fx:id="analogCh9" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox prefHeight="50.0" prefWidth="46.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="9" />
+                  <TextField fx:id="analogCh10" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox prefHeight="50.0" prefWidth="46.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="10" />
+                  <TextField fx:id="analogCh11" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox prefHeight="50.0" prefWidth="46.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="11" />
+                  <TextField fx:id="analogCh12" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox prefHeight="50.0" prefWidth="46.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="12" />
+                  <TextField fx:id="analogCh13" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox prefHeight="50.0" prefWidth="46.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="13" />
+                  <TextField fx:id="analogCh14" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox prefHeight="50.0" prefWidth="46.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="14" />
+                  <TextField fx:id="analogCh15" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox prefHeight="50.0" prefWidth="46.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="15" />
+                  <TextField fx:id="analogCh16" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="N/A" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <CheckBox layoutX="145.0" layoutY="194.0" mnemonicParsing="false" onAction="#toggleRawData" selected="true" text="Show Raw Data" />
+      <HBox fx:id="discreteHbox" layoutX="368.0" layoutY="114.0" prefHeight="53.0" prefWidth="418.0" style="-fx-border-color: BLACK;">
+         <children>
+            <VBox alignment="CENTER" prefHeight="51.0" prefWidth="25.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="0" />
+                  <CheckBox disable="true" mnemonicParsing="false" fx:id="xbox1" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox alignment="CENTER" prefHeight="51.0" prefWidth="25.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="1" />
+                  <CheckBox disable="true" mnemonicParsing="false" fx:id="xbox2" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox alignment="CENTER" prefHeight="51.0" prefWidth="25.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="2" />
+                  <CheckBox disable="true" mnemonicParsing="false" fx:id="xbox3" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox alignment="CENTER" prefHeight="51.0" prefWidth="25.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="3" />
+                  <CheckBox disable="true" mnemonicParsing="false" fx:id="xbox4" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox alignment="CENTER" prefHeight="51.0" prefWidth="25.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="4" />
+                  <CheckBox disable="true" mnemonicParsing="false" fx:id="xbox5" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox alignment="CENTER" prefHeight="51.0" prefWidth="25.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="5" />
+                  <CheckBox disable="true" mnemonicParsing="false" fx:id="xbox6" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox alignment="CENTER" prefHeight="51.0" prefWidth="25.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="6" />
+                  <CheckBox disable="true" mnemonicParsing="false" fx:id="xbox7" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox alignment="CENTER" prefHeight="51.0" prefWidth="25.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="7" />
+                  <CheckBox disable="true" mnemonicParsing="false" fx:id="xbox8" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox alignment="CENTER" prefHeight="51.0" prefWidth="25.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="8" />
+                  <CheckBox disable="true" mnemonicParsing="false" fx:id="xbox9" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox alignment="CENTER" prefHeight="51.0" prefWidth="25.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="9" />
+                  <CheckBox disable="true" mnemonicParsing="false" fx:id="xbox10" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox alignment="CENTER" prefHeight="51.0" prefWidth="25.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="10" />
+                  <CheckBox disable="true" mnemonicParsing="false" fx:id="xbox11" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox alignment="CENTER" prefHeight="51.0" prefWidth="25.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="11" />
+                  <CheckBox disable="true" mnemonicParsing="false" fx:id="xbox12" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox alignment="CENTER" prefHeight="51.0" prefWidth="25.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="12" />
+                  <CheckBox disable="true" mnemonicParsing="false" fx:id="xbox13" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox alignment="CENTER" prefHeight="51.0" prefWidth="25.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="13" />
+                  <CheckBox disable="true" mnemonicParsing="false" fx:id="xbox14" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox alignment="CENTER" prefHeight="51.0" prefWidth="25.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="14" />
+                  <CheckBox disable="true" mnemonicParsing="false" fx:id="xbox15" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <VBox alignment="CENTER" prefHeight="51.0" prefWidth="25.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="48.0" text="15" />
+                  <CheckBox disable="true" mnemonicParsing="false" fx:id="xbox16" />
+               </children>
+            </VBox>
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+            <Line endX="-100.0" endY="50.0" startX="-100.0" />
+         </children>
+      </HBox>
+      <Label fx:id="descrLabel" layoutX="209.0" layoutY="86.0" prefHeight="17.0" prefWidth="748.0" />
    </children>
 </AnchorPane>

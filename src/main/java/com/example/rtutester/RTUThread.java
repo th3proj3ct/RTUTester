@@ -7,26 +7,34 @@ import java.util.Arrays;
 import static com.example.rtutester.Const.*;
 import static com.example.rtutester.Const.HEADER_LENGTH;
 import static com.example.rtutester.FunctionHelper.*;
+import static com.example.rtutester.HelloController.selectedRTU;
 import static com.example.rtutester.HelloController.socket;
 
 public class RTUThread implements Runnable {
-    public RTUThread(){
+    public RTUThread(HelloController controller){
+
         run=true;
+        this.controller=controller;
     }
-    static boolean run = true;
+    public static boolean run = false;
+    static HelloController controller;
+
     @Override
     public void run() {
         try {
             while (run) {
-                socket.getOutputStream().write(RFR224);
+                socket.getOutputStream().write(getRFR(selectedRTU));
+                controller.incrementTx();
 //                System.out.println("Requested data from RTU 224");
                 Thread.sleep(50);
                 int n = socket.getInputStream().read(MAX_SIZE);
+                controller.incrementRx();
 //                System.out.println("Got " + n + " bytes");
                 if (n >= 0) {
                     byte[] readData = Arrays.copyOfRange(MAX_SIZE, 0, n);
                     try {
 //                        System.out.println("Got ");
+                        printArrayToTextArea(readData);
                         printArray(readData);
                         parseMessage(readData); //Pass it to the parser
                     } catch (Exception e) {
@@ -37,15 +45,20 @@ public class RTUThread implements Runnable {
                     System.err.println("RTUPT Input stream size <0");
                 }
                 Thread.sleep(250);
-//                waitForRtuResponse();
-
-
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("end of thread");
     }
 
+    public static byte[] getRFR(int rtuAddress){
+
+        byte[] RFR = new byte[]{0x01, (byte) rtuAddress, 0x01, 0x09, 0x00};
+        byte[] cpy = CRC16.addCrc(RFR);
+        printArray(cpy);
+        return cpy;
+    }
     public static void parseMessage(byte[] messageReceived) {
         int rtuAddress = CRC16.byteToUnsignedInt(messageReceived[ADDR_INDEX]);
         try {
@@ -70,11 +83,18 @@ public class RTUThread implements Runnable {
             int dataEnd = HEADER_LENGTH + dataLength;
             byte[] body = Arrays.copyOfRange(noWeirdEnding, dataStart, dataEnd);
             if (messageType == 0x89) {
-                //If the card is a 501
-                if (rtuAddress >= 224) {
-                    getConsoleAnalogValues(body);
-                } else {
-                    getAnalogValues(body);
+                System.out.println(controller.getCard());
+                if(!controller.getCard().contains("504")){
+                    System.out.println("Trying to get analog values");
+                    //If the card is a 501
+                    if (rtuAddress >= 224) {
+                        getConsoleAnalogValues(body);
+                    } else {
+                        getAnalogValues(body);
+                    }
+                }else{
+                    System.out.println("Trying to get digital values");
+                    getDigitalValues(body);
                 }
             }
         } catch (Exception e) {
@@ -82,6 +102,35 @@ public class RTUThread implements Runnable {
         }
     }
 
+    private static void getDigitalValues(byte[] body){
+        int numDigitalBytes = 16;
+//        SystemLogger.getInstance().printLine("RTUParser: Num digital bytes: " + numDigitalBytes);
+        byte[] digitalBytes = Arrays.copyOfRange(body, 1, numDigitalBytes + 1);
+//        SystemLogger.getInstance().printLine("RTUParser: Total digital bytes retrieved: " + digitalBytes.length);
+        boolean[] bits = getDigitalBits(digitalBytes);
+        for (int i = 0; i < numDigitalBytes; i++) {
+            for (int j = 0; j < 8; j++) {
+                controller.setChannel((i * 8) + j, bits[(i * 8) + j]);
+            }
+        }
+    }
+
+    private static boolean[] getDigitalBits(byte[] digitalBytes) {
+        boolean[] bits = new boolean[digitalBytes.length * 8];
+        int bitCounter = 0;
+        for (int j = 0; j < digitalBytes.length; j++) {
+            for (int i = 0; i < 8; i++) {
+                bits[bitCounter] = isSet(digitalBytes[j], i);
+                bitCounter++;
+            }
+        }
+        return bits;
+    }
+
+    private static boolean isSet(byte b, int bit) {
+        int bitPosition = bit % 8;  // Position of this bit in a byte
+        return (~b >> bitPosition & 1) == 1;
+    }
     public static synchronized int[] getAnalogValues(byte[] analogBytes) {
         int analogCnt = 0;
         int[] returnArray = new int[analogBytes.length / 2];
@@ -113,6 +162,9 @@ public class RTUThread implements Runnable {
             }
             analogCnt++;
         }
+        for(int i=0; i<returnArray.length; i++){
+            controller.setChannel(i+1,returnArray[i]);
+        }
         return returnArray;
     }
 
@@ -138,6 +190,9 @@ public class RTUThread implements Runnable {
             System.out.print("[" + val + "] ");
         }
         System.out.println("");
+        for(int i=0; i<returnArray.length; i++){
+            controller.setChannel(i+1,returnArray[i]);
+        }
         return returnArray;
     }
 
@@ -152,5 +207,31 @@ public class RTUThread implements Runnable {
         } else {
             getAnalogValues(analogBytes);
         }
+    }
+
+
+    private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+
+    public void printArrayToTextArea(byte[] bytes) {
+        String outputString = "";
+        for (byte aByte : bytes) {
+            int v = aByte & 0xFF;
+            outputString += HEX_ARRAY[v >>> 4] + "" + HEX_ARRAY[v & 0x0F] + "-";
+        }
+        outputString=outputString.substring(0,outputString.length()-1);
+        controller.appendText(outputString);
+        System.out.println(outputString);
+    }
+
+    public static String byteToHexString(byte[] b) {
+        int v = b[0] & 0xFF;
+        return HEX_ARRAY[v >>> 4] + "" + HEX_ARRAY[v & 0x0F];
+    }
+    public static String byteToHexString(byte b) {
+        String outputString = "";
+        int v = b & 0xFF;
+        outputString += HEX_ARRAY[v >>> 4] + "" + HEX_ARRAY[v & 0x0F] + "-";
+        outputString=outputString.substring(0,outputString.length()-1);
+        return outputString;
     }
 }
