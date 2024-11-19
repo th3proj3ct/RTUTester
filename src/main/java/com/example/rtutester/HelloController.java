@@ -329,4 +329,86 @@ public class HelloController implements Initializable {
             case 16 -> analogCh16.setText("" + value);
         }
     }
+
+    public static void main(String[] args){
+//        printArray(RFR224);
+//        byte b = 100;
+//        byteToHex(new byte[]{b});
+//        try {
+//            System.out.println("Attempting to create socket ADDRESS = " + PORT_SERIAL_SERVER_ADDR1 + ":" + SERIAL_SERVER_PORT);
+//            socket = new Socket(PORT_SERIAL_SERVER_ADDR1, SERIAL_SERVER_PORT+1);
+//            System.out.println("Socket created");
+//            calibrateRTU(224);
+//            System.out.println("RTU 224 calibrated");
+//            while (run) {
+//                socket.getOutputStream().write(RFR224);
+//                System.out.println("Requested data from RTU 224");
+//                waitForRtuResponse();
+//
+//
+//            }
+//        } catch (Exception e) {
+//            System.err.println("RTURT Main: While loop exception");
+//            e.printStackTrace();
+//        }
+        try {
+            int targetRTU = 3;
+            byte[] rtuRFRNoCrc = new byte[]{0x01, (byte) targetRTU, 0x00, 0x09, 0x00};
+            System.out.print("RFR "+targetRTU+" with no crc: ");
+            printArray(rtuRFRNoCrc);
+            byte[] rfrCRC = CRC16.addCrc(rtuRFRNoCrc);
+            System.out.print("RFR "+targetRTU+" with crc calculated back in: ");
+            printArray(rfrCRC);
+            int processorPort = SERIAL_SERVER_PORT+1;
+            System.out.println("Attempting to create socket ADDRESS = " + PORT_SERIAL_SERVER_ADDR1 + ":" + processorPort);
+            socket = new Socket(PORT_SERIAL_SERVER_ADDR1, processorPort);
+//            socket.setSoTimeout(3000);
+//            socket.setTcpNoDelay(true);
+            System.out.println("Socket created");
+//            while (run) {
+            socket.getOutputStream().write(rfrCRC);
+            System.out.println("Requested data from RTU "+targetRTU);
+            waitForRtuResponse();
+            Thread.sleep(500);
+//            }
+        } catch (Exception e) {
+            System.err.println("RTURT Main: While loop exception");
+            e.printStackTrace();
+        }
+    }
+
+    private static void waitForRtuResponse() throws IOException {
+        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        int cnt = 0;
+        while (!in.ready()) {
+            try {
+                if (cnt > 50) {
+                    break;
+                }
+                cnt++;
+                Thread.sleep(20);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (cnt > 10) {
+            System.err.println("No response received, stop waiting");
+            return;
+        }
+        System.out.println("Starting parsing");
+        int n = socket.getInputStream().read(MAX_SIZE);
+        System.out.println("Got " + n + " bytes");
+        if (n >= 0) {
+            byte[] readData = Arrays.copyOfRange(MAX_SIZE, 0, n);
+            try {
+                System.out.print("Got ");
+                printArray(readData);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            //Should never be less than zero.
+            System.err.println("RTUPT Input stream size <0");
+        }
+    }
 }
