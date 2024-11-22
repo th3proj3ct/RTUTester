@@ -1,23 +1,22 @@
 package com.example.rtutester;
 
-import javafx.scene.control.Slider;
-
 import java.util.Arrays;
 
 import static com.example.rtutester.Const.*;
 import static com.example.rtutester.Const.HEADER_LENGTH;
 import static com.example.rtutester.FunctionHelper.*;
-import static com.example.rtutester.HelloController.selectedRTU;
-import static com.example.rtutester.HelloController.socket;
+import static com.example.rtutester.RTUPageController.selectedRTU;
+import static com.example.rtutester.RTUPageController.socket;
 
 public class RTUThread implements Runnable {
-    public RTUThread(HelloController controller){
+    public RTUThread(RTUPageController controller) {
 
-        run=true;
-        this.controller=controller;
+        run = true;
+        RTUThread.controller = controller;
     }
+
     public static boolean run = false;
-    static HelloController controller;
+    static RTUPageController controller;
 
     @Override
     public void run() {
@@ -25,7 +24,7 @@ public class RTUThread implements Runnable {
             while (run) {
                 socket.getOutputStream().write(getRFR(selectedRTU));
                 controller.incrementTx();
-//                System.out.println("Requested data from RTU 224");
+                System.out.println("Requested data from RTU " + selectedRTU);
                 Thread.sleep(50);
                 int n = socket.getInputStream().read(MAX_SIZE);
                 controller.incrementRx();
@@ -52,26 +51,29 @@ public class RTUThread implements Runnable {
         System.out.println("end of thread");
     }
 
-    public static byte[] getRFR(int rtuAddress){
+    public static byte[] getRFR(int rtuAddress) {
 
         byte[] RFR = new byte[]{0x01, (byte) rtuAddress, 0x01, 0x09, 0x00};
         byte[] cpy = CRC16.addCrc(RFR);
         printArray(cpy);
         return cpy;
     }
+
     public static void parseMessage(byte[] messageReceived) {
         int rtuAddress = CRC16.byteToUnsignedInt(messageReceived[ADDR_INDEX]);
         try {
+            controller.appendText("Received RTU address: " + rtuAddress);
 //            System.out.println("Received RTU address: " + rtuAddress);
-            if (!RTU_INDEXES.contains(rtuAddress)) {
-                System.err.println("Invalid RTU address " + rtuAddress);
-                return;
-            }
+//            if (!RTU_INDEXES.contains(rtuAddress)) {
+//                System.err.println("Invalid RTU address " + rtuAddress);
+//                return;
+//            }
             //The length is the header (always 5) plus the specified data length, plus the 2 checksum bytes.
             //Need to do this to account for the random FE that MAY be at the end of the RTU message.
             int length = messageReceived[4] + HEADER_LENGTH + CHECKSUM_LENGTH;
             byte[] noWeirdEnding = Arrays.copyOfRange(messageReceived, 0, length);
             if (!CRC16.verifyCrc(noWeirdEnding)) {
+                controller.appendText("CRC mismatch on RTU " + rtuAddress);
 //                System.err.println("CRC mismatch on RTU addr " + rtuAddress);
                 return;
             } else {
@@ -79,30 +81,38 @@ public class RTUThread implements Runnable {
             }
             int messageType = CRC16.byteToUnsignedInt(noWeirdEnding[TYPE_INDEX]);
             int dataLength = CRC16.byteToUnsignedInt(noWeirdEnding[LENGTH_INDEX]);
-            int dataStart = HEADER_LENGTH + 1;
+            int dataStart = HEADER_LENGTH;
             int dataEnd = HEADER_LENGTH + dataLength;
             byte[] body = Arrays.copyOfRange(noWeirdEnding, dataStart, dataEnd);
             if (messageType == 0x89) {
-                System.out.println(controller.getCard());
-                if(!controller.getCard().contains("504")){
-                    System.out.println("Trying to get analog values");
-                    //If the card is a 501
-                    if (rtuAddress >= 224) {
-                        getConsoleAnalogValues(body);
-                    } else {
-                        getAnalogValues(body);
-                    }
-                }else{
-                    System.out.println("Trying to get digital values");
-                    getDigitalValues(body);
-                }
+                processFullReport(rtuAddress, dataLength, body);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private static void getDigitalValues(byte[] body){
+    private static void processFullReport(int rtuAddress, int dataLength, byte[] body) {
+        System.out.println(controller.getCard());
+        byte statusByte = body[0];
+        controller.processStatusByte(statusByte);
+        byte[] dataOnlyBody = Arrays.copyOfRange(body, 1, body.length);
+        if (!controller.getCard().contains("504")) {
+            System.out.println("Trying to get analog values");
+            //If the card is a 501
+            if (rtuAddress >= 224) {
+                getConsoleAnalogValues(dataOnlyBody);
+            } else {
+                getAnalogValues(dataOnlyBody);
+            }
+        } else {
+            System.out.println("Trying to get digital values");
+            getDigitalValues(dataOnlyBody);
+        }
+    }
+
+
+    private static void getDigitalValues(byte[] body) {
         int numDigitalBytes = 16;
 //        SystemLogger.getInstance().printLine("RTUParser: Num digital bytes: " + numDigitalBytes);
         byte[] digitalBytes = Arrays.copyOfRange(body, 1, numDigitalBytes + 1);
@@ -131,6 +141,7 @@ public class RTUThread implements Runnable {
         int bitPosition = bit % 8;  // Position of this bit in a byte
         return (~b >> bitPosition & 1) == 1;
     }
+
     public static synchronized int[] getAnalogValues(byte[] analogBytes) {
         int analogCnt = 0;
         int[] returnArray = new int[analogBytes.length / 2];
@@ -162,8 +173,8 @@ public class RTUThread implements Runnable {
             }
             analogCnt++;
         }
-        for(int i=0; i<returnArray.length; i++){
-            controller.setChannel(i+1,returnArray[i]);
+        for (int i = 0; i < returnArray.length; i++) {
+            controller.setChannel(i + 1, returnArray[i]);
         }
         return returnArray;
     }
@@ -190,24 +201,24 @@ public class RTUThread implements Runnable {
             System.out.print("[" + val + "] ");
         }
         System.out.println("");
-        for(int i=0; i<returnArray.length; i++){
-            controller.setChannel(i+1,returnArray[i]);
+        for (int i = 0; i < returnArray.length; i++) {
+            controller.setChannel(i + 1, returnArray[i]);
         }
         return returnArray;
     }
 
-    public static synchronized void processFullReport(int rtuAddress, int dataLength, byte[] messageBody) {
-        int numDigitalBytes = 0;
-        byte[] digitalBytes = Arrays.copyOfRange(messageBody, 1, numDigitalBytes + 1); //Skip the status byte
-        int analogStart = digitalBytes.length; //Skip the status byte
-        int analogEnd = dataLength - 1;
-        byte[] analogBytes = Arrays.copyOfRange(messageBody, analogStart, analogEnd);
-        if (rtuAddress >= 224) {
-            getConsoleAnalogValues(analogBytes);
-        } else {
-            getAnalogValues(analogBytes);
-        }
-    }
+//    public static synchronized void processFullReport(int rtuAddress, int dataLength, byte[] messageBody) {
+//        int numDigitalBytes = 0;
+//        byte[] digitalBytes = Arrays.copyOfRange(messageBody, 1, numDigitalBytes + 1); //Skip the status byte
+//        int analogStart = digitalBytes.length; //Skip the status byte
+//        int analogEnd = dataLength - 1;
+//        byte[] analogBytes = Arrays.copyOfRange(messageBody, analogStart, analogEnd);
+//        if (rtuAddress >= 224) {
+//            getConsoleAnalogValues(analogBytes);
+//        } else {
+//            getAnalogValues(analogBytes);
+//        }
+//    }
 
 
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
@@ -218,7 +229,7 @@ public class RTUThread implements Runnable {
             int v = aByte & 0xFF;
             outputString += HEX_ARRAY[v >>> 4] + "" + HEX_ARRAY[v & 0x0F] + "-";
         }
-        outputString=outputString.substring(0,outputString.length()-1);
+        outputString = outputString.substring(0, outputString.length() - 1);
         controller.appendText(outputString);
         System.out.println(outputString);
     }
@@ -227,11 +238,12 @@ public class RTUThread implements Runnable {
         int v = b[0] & 0xFF;
         return HEX_ARRAY[v >>> 4] + "" + HEX_ARRAY[v & 0x0F];
     }
+
     public static String byteToHexString(byte b) {
         String outputString = "";
         int v = b & 0xFF;
         outputString += HEX_ARRAY[v >>> 4] + "" + HEX_ARRAY[v & 0x0F] + "-";
-        outputString=outputString.substring(0,outputString.length()-1);
+        outputString = outputString.substring(0, outputString.length() - 1);
         return outputString;
     }
 }

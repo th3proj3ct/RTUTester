@@ -17,7 +17,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="1062.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rtutester.HelloController">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="1062.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rtutester.RTUPageController">
    <children>
       <MenuBar prefHeight="25.0" prefWidth="1062.0">
         <menus>
@@ -26,7 +26,8 @@
                   <MenuItem mnemonicParsing="false" onAction="#showHelp" text="N-port Default IP" />
                   <MenuItem mnemonicParsing="false" onAction="#showOpSettings" text="N-port Operating Settings" />
                   <MenuItem mnemonicParsing="false" onAction="#showSerSettings" text="N-port Serial Settings" />
-                  <MenuItem mnemonicParsing="false" onAction="#showPinSettings" text="N-port DB9 Pinout" />
+                  <MenuItem mnemonicParsing="false" onAction="#showPinSettings" text="N-port Daughterboard DB9 Pinout" />
+                  <MenuItem mnemonicParsing="false" onAction="#showProcessor9PinSettings" text="N-port Processor DB9 Pinout" />
             </items>
           </Menu>
         </menus>
@@ -107,7 +108,7 @@
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
                   <Button fx:id="calibrateButton" mnemonicParsing="false" onAction="#calibrateRTU" prefHeight="25.0" prefWidth="135.0" text="Calibrate" />
-                  <Label text="(Need if no processor)" />
+                  <Label fx:id="calibrateLabel" text="(Need if no processor)" />
                </children>
             </VBox>
             <Label fx:id="calibratedText" alignment="CENTER" prefHeight="17.0" prefWidth="132.0" text="Calibrated!" textFill="#00ff1a">
@@ -141,7 +142,7 @@
             </VBox>
          </children>
       </VBox>
-      <HBox fx:id="analogHbox" layoutX="209.0" layoutY="33.0" prefHeight="47.0" prefWidth="748.0" style="-fx-border-color: BLACK;">
+      <HBox fx:id="analogHbox" layoutX="145.0" layoutY="33.0" prefHeight="47.0" prefWidth="748.0" style="-fx-border-color: BLACK;">
          <children>
             <VBox prefHeight="50.0" prefWidth="46.0">
                <children>
@@ -257,7 +258,7 @@
          </children>
       </HBox>
       <CheckBox layoutX="145.0" layoutY="194.0" mnemonicParsing="false" onAction="#toggleRawData" selected="true" text="Show Raw Data" />
-      <HBox fx:id="discreteHbox" layoutX="368.0" layoutY="114.0" prefHeight="53.0" prefWidth="418.0" style="-fx-border-color: BLACK;">
+      <HBox fx:id="discreteHbox" layoutX="285.0" layoutY="95.0" prefHeight="53.0" prefWidth="418.0" style="-fx-border-color: BLACK;">
          <children>
             <VBox alignment="CENTER" prefHeight="51.0" prefWidth="25.0">
                <children>
@@ -375,5 +376,67 @@
          </children>
       </HBox>
       <Label fx:id="descrLabel" layoutX="209.0" layoutY="86.0" prefHeight="17.0" prefWidth="748.0" />
+      <VBox fx:id="statusVbox" layoutX="905.0" layoutY="53.0" prefHeight="100.0" prefWidth="143.0" style="-fx-border-color: BLACK;">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="132.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="15.0" text="7" />
+                  <CheckBox fx:id="statusXbox7" disable="true" mnemonicParsing="false" />
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="112.0" text="I/O Comm Fail" textAlignment="RIGHT" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="132.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="15.0" text="6" />
+                  <CheckBox fx:id="statusXbox6" disable="true" mnemonicParsing="false" />
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="112.0" text="Power-Up Flag" textAlignment="RIGHT" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="132.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="15.0" text="5" />
+                  <CheckBox fx:id="statusXbox5" disable="true" mnemonicParsing="false" />
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="112.0" text="DC Low Flag" textAlignment="JUSTIFY" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="132.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="15.0" text="4" />
+                  <CheckBox fx:id="statusXbox4" disable="true" mnemonicParsing="false" />
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="112.0" text="AC Failure Flag" textAlignment="RIGHT" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="132.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="15.0" text="3" />
+                  <CheckBox fx:id="statusXbox3" disable="true" mnemonicParsing="false" />
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="112.0" text="Calibration Flag" textAlignment="RIGHT" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="132.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="15.0" text="2" />
+                  <CheckBox fx:id="statusXbox2" disable="true" mnemonicParsing="false" />
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="112.0" text="Command Disable" textAlignment="RIGHT" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="132.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="15.0" text="1" />
+                  <CheckBox fx:id="statusXbox1" disable="true" mnemonicParsing="false" />
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="112.0" text="Extended Status" textAlignment="RIGHT" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="132.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="15.0" text="0" />
+                  <CheckBox fx:id="statusXbox0" disable="true" mnemonicParsing="false" />
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="112.0" text="Status/Alarm Flag" textAlignment="RIGHT" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <Label layoutX="389.0" layoutY="166.0" text="Serial port 1 for daughterboard only." />
+      <Label layoutX="389.0" layoutY="186.0" text="Serial port 2 for processor board" />
    </children>
 </AnchorPane>

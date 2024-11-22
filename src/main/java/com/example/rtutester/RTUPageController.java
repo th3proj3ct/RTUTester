@@ -1,28 +1,24 @@
 package com.example.rtutester;
 
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
+import javafx.scene.paint.Color;
 
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URL;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 import javax.swing.*;
@@ -31,13 +27,14 @@ import static com.example.rtutester.Const.*;
 import static com.example.rtutester.FunctionHelper.*;
 import static com.example.rtutester.RTUThread.byteToHexString;
 
-public class HelloController implements Initializable {
+public class RTUPageController implements Initializable {
 
     public static Socket socket;
     private static BufferedReader in;
 
-    public static String PORT_SERIAL_SERVER_ADDR1 = "192.168.127.254";
-    public static int SERIAL_SERVER_PORT = 4001;
+    public static String NPORT_IP_ADDR = "192.168.127.254";
+    public static int SERIAL_SERVER_PORT_1 = 4001;
+    public static int SERIAL_SERVER_PORT_2 = 4002;
 
     @FXML
     Label calibratedText;
@@ -46,16 +43,23 @@ public class HelloController implements Initializable {
     @FXML
     public TextField analogCh1, analogCh2, analogCh3, analogCh4, analogCh5, analogCh6, analogCh7, analogCh8, analogCh9, analogCh10,
             analogCh11, analogCh12, analogCh13, analogCh14, analogCh15, analogCh16;
+
+    @FXML
+    public VBox statusVbox;
     @FXML
     public AnchorPane anchorPane;
     @FXML
     public HBox hBoxSlider8, hBoxSlider7, hBoxSlider6, analogHbox, discreteHbox;
+    @FXML
+    public CheckBox statusXbox0, statusXbox1, statusXbox2, statusXbox3, statusXbox4, statusXbox5, statusXbox6, statusXbox7;
     @FXML
     public Slider slider1, slider2, slider3, slider4, slider5, slider6, slider7, slider8;
     @FXML
     public ComboBox<String> comboBoxCard;
     @FXML
     public Button calibrateButton;
+    @FXML
+    public Label calibrateLabel;
     @FXML
     public ToggleButton startButton, stopButton;
     @FXML
@@ -71,7 +75,7 @@ public class HelloController implements Initializable {
     @FXML
     public Label txLabel, rxLabel;
     private Thread thread;
-    DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
+    static DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
 
     int tx = 0, rx = 0;
 
@@ -116,12 +120,14 @@ public class HelloController implements Initializable {
                 hBoxSlider7.setVisible(true);
                 hBoxSlider8.setVisible(true);
                 calibrateButton.setVisible(false);
+                calibrateLabel.setVisible(false);
                 recalcRTUFromDipswitches(true);
             } else {
                 hBoxSlider6.setVisible(false);
                 hBoxSlider7.setVisible(false);
                 hBoxSlider8.setVisible(false);
                 calibrateButton.setVisible(true);
+                calibrateLabel.setVisible(true);
                 recalcRTUFromDipswitches(false);
             }
         });
@@ -140,9 +146,9 @@ public class HelloController implements Initializable {
             String selectedOption = comboBoxCard.getSelectionModel().getSelectedItem();
             analogHbox.setVisible(!selectedOption.contains("504"));
             discreteHbox.setVisible(selectedOption.contains("504"));
-            if(selectedOption.contains("501")){
+            if (selectedOption.contains("501")) {
                 descrLabel.setText("10v or 20mA = 2000 counts, 0v/0mA = 0 counts, linear changes");
-            }else{
+            } else {
                 descrLabel.setText("");
             }
         });
@@ -151,10 +157,20 @@ public class HelloController implements Initializable {
         stopButton.setToggleGroup(group);
         stopButton.setSelected(true);
         startButton.setOnAction(e -> {
+            int port = -1;
             try {
-                socket = new Socket(PORT_SERIAL_SERVER_ADDR1, SERIAL_SERVER_PORT);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
+                socket = new Socket();
+                if (processorCheckbox.isSelected()) {
+                    port = SERIAL_SERVER_PORT_2;
+                } else {
+                    port = SERIAL_SERVER_PORT_1;
+                }
+                socket.connect(new InetSocketAddress(NPORT_IP_ADDR, port), 1000);
+            } catch (Exception ex) {
+                appendText("Could not connect to [" + NPORT_IP_ADDR + ":" + port + "]");
+                stopButton.setSelected(true);
+                return;
+//                throw new RuntimeException(ex);
             }
             if (thread.isAlive()) {
                 RTUThread.run = true;
@@ -178,6 +194,7 @@ public class HelloController implements Initializable {
         comboBoxCard.getSelectionModel().selectFirst();
         recalcRTUFromDipswitches(true);
         calibrateButton.setVisible(false);
+        calibrateLabel.setVisible(true);
         descrLabel.setText("10v or 20mA = 2000 counts, 0v/0mA = 0 counts, linear changes");
         discreteHbox.setVisible(false);
     }
@@ -186,7 +203,7 @@ public class HelloController implements Initializable {
         String binaryString = "";
         Slider[] sliders;
         if (processor) {
-            sliders = new Slider[]{slider8, slider7, slider6, slider5, slider4, slider3, slider2, slider1};
+            sliders = new Slider[]{slider1, slider2, slider3, slider4, slider5, slider6, slider7, slider8};
         } else {
 
             sliders = new Slider[]{slider5, slider4, slider3, slider2, slider1};
@@ -205,15 +222,19 @@ public class HelloController implements Initializable {
     @FXML
     public void calibrateRTU(ActionEvent actionEvent) {
         try {
-            appendText("Attempting to create socket ADDRESS = " + PORT_SERIAL_SERVER_ADDR1 + ":" + SERIAL_SERVER_PORT);
+            appendText("Attempting to create socket ADDRESS = " + NPORT_IP_ADDR + ":" + SERIAL_SERVER_PORT_1);
             if (socket == null || socket.isClosed()) {
-                socket = new Socket(PORT_SERIAL_SERVER_ADDR1, SERIAL_SERVER_PORT);
+                socket = new Socket();
+                socket.connect(new InetSocketAddress(NPORT_IP_ADDR, SERIAL_SERVER_PORT_1), 1000);
                 appendText("Socket created");
             }
             calibrateRTU(selectedRTU);
+            calibratedText.setTextFill(Color.GREEN);
             calibratedText.setText("Calibration Sent!");
             appendText("RTU " + selectedRTU + " message sent");
         } catch (Exception e) {
+            appendText("Failed to calibrate RTU");
+            calibratedText.setTextFill(Color.RED);
             calibratedText.setText("FAILED!");
             System.err.println("RTURT Main: While loop exception");
             e.printStackTrace();
@@ -234,25 +255,28 @@ public class HelloController implements Initializable {
         areaVisible = !areaVisible;
         textArea.setVisible(areaVisible);
     }
+
     @FXML
     public void showHelp(ActionEvent e) {
         JOptionPane.showMessageDialog(
                 null,
-                "Open a web browser and navigate to the N-port default IP: 192.168.127.254",
-                "N-port Operating Settings", JOptionPane.INFORMATION_MESSAGE);
+                "Open a web browser and navigate to the N-port default IP: 192.168.127.254. Default user: admin Default password: moxa",
+                "N-port Web Interface", JOptionPane.INFORMATION_MESSAGE);
     }
+
     @FXML
     public void showOpSettings(ActionEvent e) {
-        ImageIcon icon = new ImageIcon(HelloController.class.getResource("/img/operatingsettings.png"));
+        ImageIcon icon = new ImageIcon(RTUPageController.class.getResource("/img/operatingsettings.png"));
         JOptionPane.showMessageDialog(
                 null,
                 "",
                 "N-port Operating Settings", JOptionPane.INFORMATION_MESSAGE,
                 icon);
     }
+
     @FXML
     public void showSerSettings(ActionEvent e) {
-        ImageIcon icon = new ImageIcon(HelloController.class.getResource("/img/serialsettings.png"));
+        ImageIcon icon = new ImageIcon(RTUPageController.class.getResource("/img/serialsettings.png"));
         JOptionPane.showMessageDialog(
                 null,
                 "",
@@ -260,16 +284,26 @@ public class HelloController implements Initializable {
                 icon);
     }
     @FXML
-    public void showPinSettings(ActionEvent e) {
-        ImageIcon icon = new ImageIcon(HelloController.class.getResource("/img/rs485.png"));
+    public void showProcessor9PinSettings(ActionEvent e) {
+        ImageIcon icon = new ImageIcon(RTUPageController.class.getResource("/img/moxa485.png"));
         JOptionPane.showMessageDialog(
                 null,
                 "",
-                "N-port DB9 Connector", JOptionPane.INFORMATION_MESSAGE,
+                "N-port Processor Card Port 2 DB9 Pinout", JOptionPane.INFORMATION_MESSAGE,
                 icon);
     }
 
-    public static void calibrateRTU(int rtuAddress) {
+    @FXML
+    public void showPinSettings(ActionEvent e) {
+        ImageIcon icon = new ImageIcon(RTUPageController.class.getResource("/img/rs485.png"));
+        JOptionPane.showMessageDialog(
+                null,
+                "",
+                "N-port Daughterboard Only Port 1 DB9 Pinout", JOptionPane.INFORMATION_MESSAGE,
+                icon);
+    }
+
+    public void calibrateRTU(int rtuAddress) throws Exception {
         try {
             for (int i = 0; i < 16; i++) {
                 byte[] cpy = Arrays.copyOf(CALIBRATE_CH_MSG, CALIBRATE_CH_MSG.length);
@@ -280,7 +314,9 @@ public class HelloController implements Initializable {
                 Thread.sleep(150);
             }
         } catch (Exception e) {
+            appendText("Failed to calibrate RTU");
             e.printStackTrace();
+            throw new Exception();
         }
     }
 
@@ -330,7 +366,7 @@ public class HelloController implements Initializable {
         }
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 //        printArray(RFR224);
 //        byte b = 100;
 //        byteToHex(new byte[]{b});
@@ -354,20 +390,20 @@ public class HelloController implements Initializable {
         try {
             int targetRTU = 3;
             byte[] rtuRFRNoCrc = new byte[]{0x01, (byte) targetRTU, 0x00, 0x09, 0x00};
-            System.out.print("RFR "+targetRTU+" with no crc: ");
+            System.out.print("RFR " + targetRTU + " with no crc: ");
             printArray(rtuRFRNoCrc);
             byte[] rfrCRC = CRC16.addCrc(rtuRFRNoCrc);
-            System.out.print("RFR "+targetRTU+" with crc calculated back in: ");
+            System.out.print("RFR " + targetRTU + " with crc calculated back in: ");
             printArray(rfrCRC);
-            int processorPort = SERIAL_SERVER_PORT+1;
-            System.out.println("Attempting to create socket ADDRESS = " + PORT_SERIAL_SERVER_ADDR1 + ":" + processorPort);
-            socket = new Socket(PORT_SERIAL_SERVER_ADDR1, processorPort);
+            int processorPort = SERIAL_SERVER_PORT_1 + 1;
+            System.out.println("Attempting to create socket ADDRESS = " + NPORT_IP_ADDR + ":" + processorPort);
+            socket = new Socket(NPORT_IP_ADDR, processorPort);
 //            socket.setSoTimeout(3000);
 //            socket.setTcpNoDelay(true);
             System.out.println("Socket created");
 //            while (run) {
             socket.getOutputStream().write(rfrCRC);
-            System.out.println("Requested data from RTU "+targetRTU);
+            System.out.println("Requested data from RTU " + targetRTU);
             waitForRtuResponse();
             Thread.sleep(500);
 //            }
@@ -410,5 +446,16 @@ public class HelloController implements Initializable {
             //Should never be less than zero.
             System.err.println("RTUPT Input stream size <0");
         }
+    }
+
+    public void processStatusByte(byte statusByte) {
+        statusXbox0.setSelected((statusByte & (byte) 0x01) != 0);
+        statusXbox0.setSelected((statusByte & (byte) 0x02) != 0);
+        statusXbox0.setSelected((statusByte & (byte) 0x04) != 0);
+        statusXbox0.setSelected((statusByte & (byte) 0x08) != 0);
+        statusXbox0.setSelected((statusByte & (byte) 0x10) != 0);
+        statusXbox0.setSelected((statusByte & (byte) 0x20) != 0);
+        statusXbox0.setSelected((statusByte & (byte) 0x40) != 0);
+        statusXbox0.setSelected((statusByte & (byte) 0x80) != 0);
     }
 }
