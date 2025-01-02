@@ -25,14 +25,14 @@ import javax.swing.*;
 
 import static com.example.rtutester.Const.*;
 import static com.example.rtutester.FunctionHelper.*;
-import static com.example.rtutester.RTUThread.byteToHexString;
 
 public class RTUPageController implements Initializable {
 
     public static Socket socket;
     private static BufferedReader in;
 
-    public static String NPORT_IP_ADDR = "192.168.127.254";
+    //    public static String NPORT_IP_ADDR = "192.168.127.254";
+    public static String NPORT_IP_ADDR = "192.168.1.250";
     public static int SERIAL_SERVER_PORT_1 = 4001;
     public static int SERIAL_SERVER_PORT_2 = 4002;
 
@@ -170,7 +170,6 @@ public class RTUPageController implements Initializable {
                 appendText("Could not connect to [" + NPORT_IP_ADDR + ":" + port + "]");
                 stopButton.setSelected(true);
                 return;
-//                throw new RuntimeException(ex);
             }
             if (thread.isAlive()) {
                 RTUThread.run = true;
@@ -246,9 +245,49 @@ public class RTUPageController implements Initializable {
 
     public void appendText(String s) {
         textArea.appendText(LocalDateTime.now().format(myFormatObj) + ": " + s + "\n\r");
+        System.out.println(s);
     }
 
     boolean areaVisible = true;
+
+    @FXML
+    public void checkAddresses(ActionEvent e) {
+        try {
+            socket = new Socket();
+            socket.connect(new InetSocketAddress(NPORT_IP_ADDR, 4002), 1000);
+            appendText("Checking Addresses [this will take ~1minute]");
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (int i = 0; i <= 255; i++) {
+                        try {
+                            byte[] request = RTUThread.getRFR(i);
+                            socket.getOutputStream().write(request);
+                            System.out.println("Sending request to Address " + i);
+                            printArray(request);
+                            Thread.sleep(100);
+                            int n = socket.getInputStream().read(MAX_SIZE, 0, socket.getInputStream().available());
+                            System.out.println("Got " + n + " bytes");
+                            if (n > 0) {
+                                byte[] readData = Arrays.copyOfRange(MAX_SIZE, 0, n);
+                                appendText("GOT RESPONSE ON ADDRESS [ " + i + " ]");
+                                System.out.print("Got: ");
+                                appendText(getByteArrayToString(readData));
+                                return;
+                            }
+                        } catch (Exception ed) {
+                            ed.printStackTrace();
+                        }
+                    }
+                    appendText("Did not get a response on any RTU 0-255");
+                }
+            }).start();
+            Thread.sleep(1000);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
     @FXML
     public void toggleRawData(ActionEvent e) {
@@ -283,6 +322,7 @@ public class RTUPageController implements Initializable {
                 "N-port Serial Settings", JOptionPane.INFORMATION_MESSAGE,
                 icon);
     }
+
     @FXML
     public void showProcessor9PinSettings(ActionEvent e) {
         ImageIcon icon = new ImageIcon(RTUPageController.class.getResource("/img/moxa485.png"));

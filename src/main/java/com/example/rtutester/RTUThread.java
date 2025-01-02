@@ -26,7 +26,7 @@ public class RTUThread implements Runnable {
                 controller.incrementTx();
                 System.out.println("Requested data from RTU " + selectedRTU);
                 Thread.sleep(50);
-                int n = socket.getInputStream().read(MAX_SIZE);
+                int n = socket.getInputStream().read(MAX_SIZE,0,socket.getInputStream().available());
                 controller.incrementRx();
 //                System.out.println("Got " + n + " bytes");
                 if (n >= 0) {
@@ -52,10 +52,9 @@ public class RTUThread implements Runnable {
     }
 
     public static byte[] getRFR(int rtuAddress) {
-
         byte[] RFR = new byte[]{0x01, (byte) rtuAddress, 0x01, 0x09, 0x00};
         byte[] cpy = CRC16.addCrc(RFR);
-        printArray(cpy);
+//        printArray(cpy);
         return cpy;
     }
 

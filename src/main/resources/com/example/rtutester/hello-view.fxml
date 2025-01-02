@@ -17,7 +17,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="1062.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rtutester.RTUPageController">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="569.0" prefWidth="1062.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rtutester.RTUPageController">
    <children>
       <MenuBar prefHeight="25.0" prefWidth="1062.0">
         <menus>
@@ -50,49 +50,49 @@
                   <Label text="RTU Dip Switches" />
                   <HBox fx:id="hBoxSlider8" alignment="CENTER" prefHeight="0.0" prefWidth="98.0">
                      <children>
-                        <Label text="8" />
+                        <Label text="0" />
                         <Slider fx:id="slider8" blockIncrement="1.0" majorTickUnit="1.0" max="1.0" minorTickCount="0" prefHeight="24.0" prefWidth="79.0" snapToTicks="true" />
                      </children>
                   </HBox>
                   <HBox fx:id="hBoxSlider7" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Label text="7" />
+                        <Label text="1" />
                         <Slider fx:id="slider7" blockIncrement="1.0" majorTickUnit="1.0" max="1.0" minorTickCount="0" prefHeight="24.0" prefWidth="79.0" snapToTicks="true" />
                      </children>
                   </HBox>
                   <HBox fx:id="hBoxSlider6" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Label text="6" />
+                        <Label text="2" />
                         <Slider fx:id="slider6" blockIncrement="1.0" majorTickUnit="1.0" max="1.0" minorTickCount="0" prefHeight="24.0" prefWidth="79.0" snapToTicks="true" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Label text="5" />
+                        <Label text="3" />
                         <Slider fx:id="slider5" blockIncrement="1.0" majorTickUnit="1.0" max="1.0" minorTickCount="0" prefHeight="24.0" prefWidth="79.0" snapToTicks="true" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Label text="4" />
+                        <Label text="44" />
                         <Slider fx:id="slider4" blockIncrement="1.0" majorTickUnit="1.0" max="1.0" minorTickCount="0" prefHeight="24.0" prefWidth="79.0" snapToTicks="true" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Label text="3" />
+                        <Label text="5" />
                         <Slider fx:id="slider3" blockIncrement="1.0" majorTickUnit="1.0" max="1.0" minorTickCount="0" prefHeight="24.0" prefWidth="79.0" snapToTicks="true" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Label text="2" />
+                        <Label text="6" />
                         <Slider fx:id="slider2" blockIncrement="1.0" majorTickUnit="1.0" max="1.0" minorTickCount="0" prefHeight="24.0" prefWidth="79.0" snapToTicks="true" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Label text="1" />
+                        <Label text="7" />
                         <Slider fx:id="slider1" blockIncrement="1.0" majorTickUnit="1.0" max="1.0" minorTickCount="0" prefHeight="24.0" prefWidth="79.0" snapToTicks="true" />
                      </children>
                   </HBox>
@@ -438,5 +438,6 @@
       </VBox>
       <Label layoutX="389.0" layoutY="166.0" text="Serial port 1 for daughterboard only." />
       <Label layoutX="389.0" layoutY="186.0" text="Serial port 2 for processor board" />
+      <Button layoutX="145.0" layoutY="162.0" mnemonicParsing="false" onAction="#checkAddresses" text="CheckAddresses" />
    </children>
 </AnchorPane>
