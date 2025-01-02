@@ -271,8 +271,7 @@ public class RTUPageController implements Initializable {
                             if (n > 0) {
                                 byte[] readData = Arrays.copyOfRange(MAX_SIZE, 0, n);
                                 appendText("GOT RESPONSE ON ADDRESS [ " + i + " ]");
-                                System.out.print("Got: ");
-                                appendText(getByteArrayToString(readData));
+                                appendText("Got: "+getByteArrayToString(readData));
                                 return;
                             }
                         } catch (Exception ed) {

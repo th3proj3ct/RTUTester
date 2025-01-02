@@ -24,15 +24,15 @@ public class RTUThread implements Runnable {
             while (run) {
                 socket.getOutputStream().write(getRFR(selectedRTU));
                 controller.incrementTx();
-                System.out.println("Requested data from RTU " + selectedRTU);
+                controller.appendText("Requested data from RTU " + selectedRTU);
                 Thread.sleep(50);
                 int n = socket.getInputStream().read(MAX_SIZE,0,socket.getInputStream().available());
                 controller.incrementRx();
 //                System.out.println("Got " + n + " bytes");
-                if (n >= 0) {
+                if (n > 0) {
                     byte[] readData = Arrays.copyOfRange(MAX_SIZE, 0, n);
                     try {
-//                        System.out.println("Got ");
+                        controller.appendText("Got: "+getByteArrayToString(readData));
                         printArrayToTextArea(readData);
                         printArray(readData);
                         parseMessage(readData); //Pass it to the parser
@@ -40,8 +40,9 @@ public class RTUThread implements Runnable {
                         e.printStackTrace();
                     }
                 } else {
+                    controller.appendText("No response");
                     //Should never be less than zero.
-                    System.err.println("RTUPT Input stream size <0");
+//                    System.err.println("RTUPT Input stream size <0");
                 }
                 Thread.sleep(250);
             }
